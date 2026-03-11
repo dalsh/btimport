@@ -1,5 +1,7 @@
 # Bluetooth Key Importer (btimport)
 
+[![Python Tests](https://github.com/dalsh/btimport/actions/workflows/test.yml/badge.svg)](https://github.com/dalsh/btimport/actions/workflows/test.yml)
+
 A tool to synchronize Bluetooth link keys from a Windows registry hive to a Linux installation. This is useful for dual-booting systems where you want to use the same Bluetooth devices on both Windows and Linux without re-pairing.
 
 ## Requirements
