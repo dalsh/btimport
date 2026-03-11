@@ -1,3 +1,16 @@
+#     This program is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import unittest
 from unittest.mock import patch, mock_open, MagicMock
 import os
@@ -101,6 +114,31 @@ Node has 2 subkeys and 2 values
         # 2. open(info_path, "r") to read back
         # 3. open(info_path, "w") to update key
         self.assertEqual(mock_file.call_count, 3)
+
+    @patch('btimport.get_adapter_macs')
+    @patch('os.getuid')
+    @patch('sys.stdout', new_callable=io.StringIO)
+    @patch('sys.exit')
+    def test_version_argument(self, mock_exit, mock_stdout, mock_uid, mock_get_macs):
+        # Mocking sys.argv
+        with patch('sys.argv', ['btimport.py', '--version']):
+            # sys.exit will raise SystemExit in a normal run, 
+            # but when mocked it just records the call.
+            # We need to make sure the script doesn't continue after sys.exit(0)
+            # In btimport.py, the code for version handling ends with sys.exit(0)
+            # but since sys.exit is mocked, it continues to the uid check.
+            mock_exit.side_effect = SystemExit
+            with self.assertRaises(SystemExit):
+                btimport.main()
+            
+        output = mock_stdout.getvalue()
+        self.assertIn("btimport version", output)
+        self.assertIn("ABSOLUTELY NO WARRANTY", output)
+        self.assertTrue("GPLv3" in output or "GNU General Public License v3" in output)
+        mock_exit.assert_called_once_with(0)
+        # Ensure it didn't continue to the rest of the script
+        mock_uid.assert_not_called()
+        mock_get_macs.assert_not_called()
 
 if __name__ == '__main__':
     unittest.main()

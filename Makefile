@@ -13,4 +13,8 @@ uninstall:
 test:
 	python3 test_btimport.py
 
-.PHONY: all install uninstall test
+dist:
+	@mkdir -p dist
+	tar -czf dist/btimport-$(shell grep '__version__ =' btimport.py | cut -d '"' -f 2).tar.gz btimport.py Makefile LICENSE README.md
+
+.PHONY: all install uninstall test dist

@@ -58,3 +58,7 @@ If your Windows partition is mounted at a different location, you can use the `-
 ## How it works
 
 The script uses `chntpw` to read the binary Windows Registry hive without needing Windows APIs. It extracts the Link Keys for all discovered Bluetooth adapters and devices, then updates (or creates) the corresponding configuration files in `/var/lib/bluetooth/`.
+
+## License
+
+This project is licensed under the GPLv3 licence - see the [LICENSE](LICENSE) file for details.

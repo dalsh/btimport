@@ -1,4 +1,21 @@
 #!/usr/bin/env python3
+
+#     This program is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+
+__version__ = "1.0.0"
+
 import os
 import subprocess
 import re
@@ -126,7 +143,20 @@ def main():
         default=DEFAULT_SYSTEM_HIVE,
         help=f"Path to the Windows SYSTEM registry hive (default: {DEFAULT_SYSTEM_HIVE})"
     )
+    parser.add_argument(
+        "--version", "-V",
+        action="store_true",
+        help="Print version information and license snippet"
+    )
     args = parser.parse_args()
+
+    if args.version:
+        print(f"btimport version {__version__}")
+        print("Copyright (C) 2026")
+        print("\nThis program comes with ABSOLUTELY NO WARRANTY;")
+        print("This is free software, and you are welcome to redistribute it")
+        print("under certain conditions; see the GNU General Public License v3 for details.")
+        sys.exit(0)
 
     if os.getuid() != 0:
         print(f"{RED}Error: This script must be run as root to access /var/lib/bluetooth{RESET}\n")
